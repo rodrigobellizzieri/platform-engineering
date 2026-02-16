@@ -3,19 +3,20 @@ kind: Application
 metadata:
   name: app-of-apps
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
     repoURL: https://github.com/rodrigobellizzieri/platform-engineering.git
     targetRevision: main
-    path: argocd/applications/*/application.yaml
+    path: argocd/applications
+    directory:
+      recurse: true
+      include: "*/application.yaml"
   
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
-  
+
   syncPolicy:
     automated:
       prune: true
@@ -23,11 +24,11 @@ spec:
       allowEmpty: false
     syncOptions:
       - CreateNamespace=true
-    
-    # Retry automático em caso de falha
+      - PrunePropagationPolicy=foreground
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
         maxDuration: 3m
+  revisionHistoryLimit: 10

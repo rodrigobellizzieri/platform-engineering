@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: crossplane-system
+  name: argocd
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,11 +10,11 @@ spec:
   source:
     repoURL: https://github.com/rodrigobellizzieri/platform-engineering.git
     targetRevision: main
-    path: argocd/manifests/crossplane-system
+    path: argocd/manifests/argocd
   
   destination:
     server: https://kubernetes.default.svc
-    namespace: crossplane-system
+    namespace: argocd
   
   syncPolicy:
     automated:
