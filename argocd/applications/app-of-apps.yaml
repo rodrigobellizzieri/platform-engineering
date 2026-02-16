@@ -7,14 +7,10 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  
   source:
     repoURL: https://github.com/rodrigobellizzieri/platform-engineering.git
     targetRevision: main
-    path: argocd/applications
-    directory:
-      recurse: true
-      include: 'application.yaml'
+    path: argocd/applications/*/application.yaml
   
   destination:
     server: https://kubernetes.default.svc
@@ -27,3 +23,11 @@ spec:
       allowEmpty: false
     syncOptions:
       - CreateNamespace=true
+    
+    # Retry automático em caso de falha
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
