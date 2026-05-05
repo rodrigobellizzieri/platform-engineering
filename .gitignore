@@ -1,2 +1,4 @@
 # Ignore secret files
 secret*.yaml
+.env
+**/.env
